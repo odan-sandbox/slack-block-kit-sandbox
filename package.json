@@ -30,6 +30,7 @@
     "watch": "node --loader ts-node/esm --watch src/app.ts"
   },
   "dependencies": {
-    "@tsconfig/node18": "^1.0.1"
+    "@tsconfig/node18": "^1.0.1",
+    "fastify": "^4.13.0"
   }
 }

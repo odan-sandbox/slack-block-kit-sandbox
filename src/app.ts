@@ -1,5 +1,13 @@
+import fastify from "fastify";
+
+const app = fastify({ logger: true });
+
+app.get("/", async (request, reply) => {
+  return { hello: "world" };
+});
+
 async function main(): Promise<void> {
-  console.log("poyo");
+  app.listen({ port: 3000 });
 }
 
 main();
