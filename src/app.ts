@@ -6,6 +6,11 @@ app.get("/", async (request, reply) => {
   return { hello: "world" };
 });
 
+app.post("/", (request) => {
+  request.log.info(request.body);
+  return {};
+});
+
 async function main(): Promise<void> {
   app.listen({ port: 3000 });
 }
