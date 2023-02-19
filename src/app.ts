@@ -1,23 +1,54 @@
-import fastify from "fastify";
+import "dotenv/config";
+import bolt, { BlockAction, ButtonAction } from "@slack/bolt";
+import {
+  callForParticipantBlock,
+  Props,
+} from "./call-for-participant-block.js";
 
-const app = fastify({ logger: true });
+const { App } = bolt;
 
-app.get("/", async (request, reply) => {
-  return { hello: "world" };
+const app = new App({
+  token: process.env.SLACK_BOT_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  socketMode: true,
+  appToken: process.env.SLACK_APP_TOKEN,
 });
 
-app.post("/", (request) => {
-  request.log.info(request.body);
-  return {};
-});
-
-async function main(): Promise<void> {
-  app.listen({ port: 3000 });
+async function main() {
+  await app.start(process.env.PORT || 3000);
 }
 
 main();
 
-process.on("unhandledRejection", (reason) => {
-  console.error(reason);
-  process.exit(1);
-});
+app.action<BlockAction<ButtonAction>>(
+  "participate",
+  async ({ body, payload, ack, client }) => {
+    await ack();
+    console.log("body", body);
+    console.log("payload", payload);
+
+    if (!body.message) {
+      throw new Error("No message");
+    }
+    if (!body.channel) {
+      throw new Error("No channel");
+    }
+
+    console.log(body.message.metadata);
+
+    // mutate state
+    const props: Props = {
+      ...body.message.metadata.event_payload,
+      participant: body.user.name,
+    };
+
+    const ts = body.message.ts;
+
+    await client.chat.update({
+      ...callForParticipantBlock(props).buildToObject(),
+      channel: body.channel.id,
+      ts,
+      metadata: { event_type: "props", event_payload: props },
+    });
+  }
+);
