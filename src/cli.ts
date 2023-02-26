@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { WebClient } from "@slack/web-api";
 import {
-  callForParticipantBlock,
+  CallForParticipantBlock,
   Props,
 } from "./call-for-participant-block.js";
 
@@ -15,8 +15,9 @@ const props: Props = {
 };
 
 async function main() {
+  CallForParticipantBlock(props).printPreviewUrl();
   await webClient.chat.postMessage({
-    ...callForParticipantBlock(props).channel(channel).buildToObject(),
+    ...CallForParticipantBlock(props).channel(channel).buildToObject(),
     metadata: { event_type: "props", event_payload: props },
     icon_emoji: ":robot_face:",
     username: "募集bot",

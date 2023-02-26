@@ -1,7 +1,7 @@
 import "dotenv/config";
 import bolt, { BlockAction, ButtonAction } from "@slack/bolt";
 import {
-  callForParticipantBlock,
+  CallForParticipantBlock,
   Props,
 } from "./call-for-participant-block.js";
 
@@ -35,6 +35,7 @@ app.action<BlockAction<ButtonAction>>(
     }
 
     console.log(body.message.metadata);
+    console.log(body.message.blocks);
 
     // mutate state
     const props: Props = {
@@ -45,7 +46,7 @@ app.action<BlockAction<ButtonAction>>(
     const ts = body.message.ts;
 
     await client.chat.update({
-      ...callForParticipantBlock(props).buildToObject(),
+      ...CallForParticipantBlock(props).buildToObject(),
       channel: body.channel.id,
       ts,
       metadata: { event_type: "props", event_payload: props },

@@ -6,7 +6,7 @@ export type Props = {
   participant?: string;
 };
 
-export const callForParticipantBlock = ({ eventName, participant }: Props) =>
+export const CallForParticipantBlock = ({ eventName, participant }: Props) =>
   Message()
     .text("参加者募集中")
     .blocks(
