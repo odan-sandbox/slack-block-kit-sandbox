@@ -10,15 +10,14 @@ const channel = process.env.SLACK_CHANNEL;
 
 const webClient = new WebClient(token);
 
-const props: Props = {
-  eventName: "草むしり検定",
-};
-
 async function main() {
-  CallForParticipantBlock(props).printPreviewUrl();
+  const state: Props = {
+    eventName: "草むしり検定",
+  };
+  CallForParticipantBlock(state).printPreviewUrl();
   await webClient.chat.postMessage({
-    ...CallForParticipantBlock(props).channel(channel).buildToObject(),
-    metadata: { event_type: "props", event_payload: props },
+    ...CallForParticipantBlock(state).channel(channel).buildToObject(),
+    metadata: { event_type: "state", event_payload: state },
     icon_emoji: ":robot_face:",
     username: "募集bot",
   });

@@ -38,7 +38,7 @@ app.action<BlockAction<ButtonAction>>(
     console.log(body.message.blocks);
 
     // mutate state
-    const props: Props = {
+    const state: Props = {
       ...body.message.metadata.event_payload,
       participant: body.user.name,
     };
@@ -46,10 +46,10 @@ app.action<BlockAction<ButtonAction>>(
     const ts = body.message.ts;
 
     await client.chat.update({
-      ...CallForParticipantBlock(props).buildToObject(),
+      ...CallForParticipantBlock(state).buildToObject(),
       channel: body.channel.id,
       ts,
-      metadata: { event_type: "props", event_payload: props },
+      metadata: { event_type: "state", event_payload: state },
     });
   }
 );

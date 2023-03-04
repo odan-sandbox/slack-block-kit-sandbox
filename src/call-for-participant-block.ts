@@ -1,5 +1,4 @@
-import { Message, Blocks, Elements } from "slack-block-builder";
-import { conditionals } from "slack-block-builder";
+import { Message, Blocks, Elements, conditionals } from "slack-block-builder";
 
 export type Props = {
   eventName: string;
